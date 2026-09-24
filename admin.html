@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Traanscom Admin</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="admin.css">
+</head>
+
+<body>
+
+<div id="loginView" class="login-view">
+  <div class="login-card">
+
+    <div class="brand">Traans<span>com</span></div>
+
+    <p class="eyebrow">ADMIN PANEL</p>
+
+    <h1>Welcome back</h1>
+
+    <p class="muted">
+      Manage products, stock and orders from one place.
+    </p>
+
+    <label>Email</label>
+    <input
+      id="loginEmail"
+      type="email"
+      value="admin@traanscom.com"
+    >
+
+    <label>Password</label>
+    <input
+      id="loginPassword"
+      type="password"
+      value="admin123"
+    >
+
+    <button
+      class="btn primary full"
+      id="loginBtn"
+    >
+      Sign in
+    </button>
+
+    <small>
+      Demo credentials are pre-filled for this Phase 2 prototype.
+    </small>
+
+  </div>
+</div>
+
+
+<div id="app" class="app hidden">
+
+  <aside class="sidebar">
+
+    <div class="brand">
+      Traans<span>com</span>
+    </div>
+
+    <p class="admin-label">
+      ADMIN PANEL
+    </p>
+
+    <nav>
+
+      <button
+        class="nav-item active"
+        data-view="dashboard"
+      >
+        <span class="nav-icon">▦</span>
+        <span>Dashboard</span>
+      </button>
+
+      <button
+        class="nav-item"
+        data-view="products"
+      >
+        <span class="nav-icon">▤</span>
+        <span>Products</span>
+      </button>
+
+      <button
+        class="nav-item"
+        data-view="orders"
+      >
+        <span class="nav-icon">🛒</span>
+        <span>Orders</span>
+      </button>
+
+      <button
+        class="nav-item"
+        data-view="customers"
+      >
+        <span class="nav-icon">♙</span>
+        <span>Customers</span>
+      </button>
+
+      <button
+        class="nav-item"
+        data-view="settings"
+      >
+        <span class="nav-icon">⚙</span>
+        <span>Settings</span>
+      </button>
+
+    </nav>
+
+    <button
+      class="logout"
+      id="logoutBtn"
+    >
+      ↪
+      <span>Log out</span>
+    </button>
+
+  </aside>
+
+
+  <main class="main">
+
+    <header class="topbar">
+
+      <button
+        class="mobile-menu"
+        id="mobileMenu"
+      >
+        ☰
+      </button>
+
+      <div>
+
+        <h2 id="pageTitle">
+          Dashboard
+        </h2>
+
+        <p id="pageSubtitle">
+          Store overview and quick actions
+        </p>
+
+      </div>
+
+      <div class="top-actions">
+
+        <span class="status-dot"></span>
+
+        <span>
+          Store online
+        </span>
+
+        <span class="avatar">
+          A
+        </span>
+
+      </div>
+
+    </header>
+
+
+    <!-- DASHBOARD -->
+
+    <section
+      id="dashboardView"
+      class="view"
+    >
+
+      <div class="stats">
+
+        <div class="stat">
+
+          <span class="stat-icon purple">
+            ▤
+          </span>
+
+          <div>
+            <small>Total Products</small>
+            <strong id="statProducts">0</strong>
+          </div>
+
+        </div>
+
+
+        <div class="stat">
+
+          <span class="stat-icon orange">
+            🛒
+          </span>
+
+          <div>
+            <small>Total Orders</small>
+            <strong id="statOrders">0</strong>
+          </div>
+
+        </div>
+
+
+        <div class="stat">
+
+          <span class="stat-icon teal">
+            ♙
+          </span>
+
+          <div>
+            <small>Customers</small>
+            <strong id="statCustomers">0</strong>
+          </div>
+
+        </div>
+
+
+        <div class="stat">
+
+          <span class="stat-icon pink">
+            Rs
+          </span>
+
+          <div>
+            <small>Revenue</small>
+            <strong id="statRevenue">
+              Rs. 0
+            </strong>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="grid-two">
+
+        <div class="panel">
+
+          <div class="panel-head">
+
+            <h3>
+              Recent orders
+            </h3>
+
+            <button
+              class="text-btn"
+              onclick="showView('orders')"
+            >
+              View all
+            </button>
+
+          </div>
+
+          <div id="recentOrders"></div>
+
+        </div>
+
+
+        <div class="panel">
+
+          <div class="panel-head">
+
+            <h3>
+              Low stock
+            </h3>
+
+            <button
+              class="text-btn"
+              onclick="showView('products')"
+            >
+              Manage
+            </button>
+
+          </div>
+
+          <div id="lowStock"></div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- PRODUCTS -->
+
+    <section
+      id="productsView"
+      class="view hidden"
+    >
+
+      <div class="toolbar">
+
+        <div>
+
+          <h3>
+            Products
+          </h3>
+
+          <p class="muted">
+            Manage your store inventory.
+          </p>
+
+        </div>
+
+        <button
+          class="btn primary"
+          id="addProductBtn"
+        >
+          ＋ Add product
+        </button>
+
+      </div>
+
+
+      <div class="panel product-panel">
+
+        <div class="table-tools">
+
+          <input
+            id="productSearch"
+            placeholder="Search products..."
+          >
+
+          <select id="productCategory">
+
+            <option value="all">
+              All categories
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div class="table-wrap">
+
+          <table>
+
+            <thead>
+
+              <tr>
+
+                <th>PRODUCT</th>
+                <th>CATEGORY</th>
+                <th>PRICE</th>
+                <th>STOCK</th>
+                <th>STATUS</th>
+                <th>ACTIONS</th>
+
+              </tr>
+
+            </thead>
+
+            <tbody id="productTable"></tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ORDERS -->
+
+    <section
+      id="ordersView"
+      class="view hidden"
+    >
+
+      <div class="toolbar">
+
+        <div>
+
+          <h3>
+            Orders
+          </h3>
+
+          <p class="muted">
+            Track and update customer orders.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="panel">
+
+        <div class="table-wrap">
+
+          <table>
+
+            <thead>
+
+              <tr>
+
+                <th>ORDER</th>
+                <th>CUSTOMER</th>
+                <th>DATE</th>
+                <th>TOTAL</th>
+                <th>STATUS</th>
+                <th>UPDATE</th>
+
+              </tr>
+
+            </thead>
+
+            <tbody id="orderTable"></tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- CUSTOMERS -->
+
+    <section
+      id="customersView"
+      class="view hidden"
+    >
+
+      <div class="toolbar">
+
+        <div>
+
+          <h3>
+            Customers
+          </h3>
+
+          <p class="muted">
+            Customer accounts and order activity.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="panel">
+
+        <div class="table-wrap">
+
+          <table>
+
+            <thead>
+
+              <tr>
+
+                <th>CUSTOMER</th>
+                <th>EMAIL</th>
+                <th>ORDERS</th>
+                <th>TOTAL SPENT</th>
+                <th>STATUS</th>
+
+              </tr>
+
+            </thead>
+
+            <tbody id="customerTable"></tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- SETTINGS -->
+
+    <section
+      id="settingsView"
+      class="view hidden"
+    >
+
+      <div class="toolbar">
+
+        <div>
+
+          <h3>
+            Store settings
+          </h3>
+
+          <p class="muted">
+            Basic store configuration.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="panel settings">
+
+        <label>
+          Store name
+
+          <input
+            id="storeName"
+            value="Traanscom"
+          >
+
+        </label>
+
+
+        <label>
+          Support email
+
+          <input
+            id="supportEmail"
+            value="support@traanscom.com"
+          >
+
+        </label>
+
+
+        <label>
+          Store currency / region
+
+          <select id="storeCurrency"></select>
+
+        </label>
+
+
+        <p class="muted">
+          Select the region/currency used when adding products.
+          Each product keeps its own selected currency.
+        </p>
+
+
+        <button
+          class="btn primary"
+          id="saveSettings"
+        >
+          Save settings
+        </button>
+
+      </div>
+
+    </section>
+
+  </main>
+
+</div>
+
+
+<!-- PRODUCT MODAL -->
+
+<div
+  class="modal-backdrop"
+  id="modalBackdrop"
+></div>
+
+
+<div
+  class="modal"
+  id="productModal"
+>
+
+  <div class="modal-head">
+
+    <div>
+
+      <h3 id="modalTitle">
+        Add product
+      </h3>
+
+      <p class="muted">
+        Add product details, pricing and image.
+      </p>
+
+    </div>
+
+    <button id="closeProductModal">
+      ×
+    </button>
+
+  </div>
+
+
+  <form id="productForm">
+
+    <input
+      type="hidden"
+      id="editId"
+    >
+
+
+    <!-- PRODUCT NAME + CATEGORY -->
+
+    <div class="form-grid">
+
+      <label>
+        Product name
+
+        <input
+          id="pName"
+          required
+          placeholder="e.g. Wireless Headphones"
+        >
+
+      </label>
+
+
+      <label>
+        Category
+
+        <select id="pCategory"></select>
+
+      </label>
+
+    </div>
+
+
+    <!-- CURRENCY + STOCK -->
+
+    <div class="form-grid">
+
+      <label>
+        Currency
+
+        <select id="pCurrency"></select>
+
+      </label>
+
+
+      <label>
+        Stock
+
+        <input
+          id="pStock"
+          type="number"
+          min="0"
+          required
+        >
+
+      </label>
+
+    </div>
+
+
+    <!-- SINGLE PRICE + SINGLE SALE PRICE -->
+
+    <div class="form-grid">
+
+      <label id="productPriceLabel">
+        Price (PKR)
+
+        <input
+          id="pPrice"
+          type="number"
+          min="0"
+          step="0.01"
+          placeholder="e.g. 4500"
+          required
+        >
+
+      </label>
+
+
+      <label id="productSaleLabel">
+        Sale Price (PKR)
+
+        <input
+          id="pSale"
+          type="number"
+          min="0"
+          step="0.01"
+          placeholder="e.g. 4000"
+        >
+
+      </label>
+
+    </div>
+
+
+    <!-- DESCRIPTION -->
+
+    <label>
+      Description
+
+      <textarea
+        id="pDescription"
+        rows="4"
+        placeholder="Product description"
+      ></textarea>
+
+    </label>
+
+
+    <!-- IMAGE -->
+
+    <div class="image-upload">
+
+      <div class="upload-head">
+
+        <div>
+
+          <b>
+            Product images
+          </b>
+
+          <p class="muted">
+            Upload a main product image from your computer.
+          </p>
+
+        </div>
+
+
+        <label
+          class="upload-btn"
+          for="pImage"
+        >
+          📷 Choose image
+        </label>
+
+      </div>
+
+
+      <input
+        id="pImage"
+        type="file"
+        accept="image/*"
+        hidden
+      >
+
+
+      <div
+        id="imagePreview"
+        class="image-preview"
+      >
+
+        <span class="empty-image">
+          No image selected
+        </span>
+
+      </div>
+
+
+      <button
+        type="button"
+        class="remove-image"
+        id="removeImage"
+      >
+        Remove image
+      </button>
+
+    </div>
+
+
+    <!-- EMOJI -->
+
+    <label>
+      Emoji fallback
+
+      <input
+        id="pEmoji"
+        maxlength="4"
+        placeholder="📦"
+      >
+
+    </label>
+
+
+    <!-- ACTIONS -->
+
+    <div class="modal-actions">
+
+      <button
+        type="button"
+        class="btn secondary"
+        id="cancelProduct"
+      >
+        Cancel
+      </button>
+
+
+      <button
+        class="btn primary"
+        type="submit"
+      >
+        Save product
+      </button>
+
+    </div>
+
+  </form>
+
+</div>
+
+
+<div
+  class="toast"
+  id="toast"
+></div>
+
+
+<script src="admin.js"></script>
+
+</body>
+</html>
