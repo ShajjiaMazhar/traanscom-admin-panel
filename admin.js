@@ -1,4 +1,4 @@
-const API_URL = "https://traanscom-backend.onrender.com/api";
+const API_URL = "https://traanscom-backend-api.onrender.com/api";
 
 /* =====================================================
 STATIC UI DATA
