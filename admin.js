@@ -367,6 +367,40 @@ INITIALIZATION
 
 async function init() {
 
+    /* =========================
+       CURRENCY DROPDOWNS
+       ========================= */
+
+    if ($("#pCurrency")) {
+
+        $("#pCurrency").innerHTML =
+            currencies
+                .map(currency => `
+                    <option value="${currency.code}">
+                        ${currency.code} — ${currency.name}
+                    </option>
+                `)
+                .join("");
+
+        $("#pCurrency").value = "PKR";
+    }
+
+    if ($("#storeCurrency")) {
+
+        $("#storeCurrency").innerHTML =
+            currencies
+                .map(currency => `
+                    <option value="${currency.code}">
+                        ${currency.code} — ${currency.name}
+                    </option>
+                `)
+                .join("");
+
+        $("#storeCurrency").value = "PKR";
+    }
+
+    if ($("#pImage")) {
+
 if ($("#pImage")) {
 
     $("#pImage").onchange =
