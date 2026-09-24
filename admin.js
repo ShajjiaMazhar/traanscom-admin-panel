@@ -366,6 +366,13 @@ INITIALIZATION
 ===================================================== */
 
 async function init() {
+ /* =========================
+       LOGIN BUTTON
+       ========================= */
+
+    if ($("#loginBtn")) {
+        $("#loginBtn").onclick = loginAdmin;
+    }
 
     /* =========================
        CURRENCY DROPDOWNS
@@ -401,7 +408,6 @@ async function init() {
 
     if ($("#pImage")) {
 
-if ($("#pImage")) {
 
     $("#pImage").onchange =
         handleImage;
@@ -496,18 +502,7 @@ if (token) {
 
 }
 
-/* =====================================================
-LOGIN
-===================================================== */
 
-if ($("#loginBtn")) {
-
-
-$("#loginBtn").onclick =
-    loginAdmin;
-
-
-}
 
 async function loginAdmin() {
 
