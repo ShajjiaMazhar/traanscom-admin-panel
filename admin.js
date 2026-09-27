@@ -1045,7 +1045,12 @@ function renderStats() {
             customers.length;
     }
 
-    const revenue =
+    const revenueCurrency =
+    localStorage.getItem(
+        "traanscomStoreCurrency"
+    ) || "PKR";
+
+const revenue =
     orders
         .filter(
             order =>
@@ -1055,6 +1060,14 @@ function renderStats() {
                     ""
                 ).toLowerCase() !==
                 "cancelled"
+        )
+        .filter(
+            order =>
+                String(
+                    order.currency ||
+                    "PKR"
+                ).toUpperCase() ===
+                revenueCurrency.toUpperCase()
         )
         .reduce(
             (
@@ -1069,11 +1082,6 @@ function renderStats() {
         );
 
 if ($("#statRevenue")) {
-
-    const revenueCurrency =
-        localStorage.getItem(
-            "traanscomStoreCurrency"
-        ) || "PKR";
 
     $("#statRevenue")
         .textContent =
