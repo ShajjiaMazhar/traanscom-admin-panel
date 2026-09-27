@@ -913,14 +913,19 @@ function showView(view) {
     }
 
     document
-        .querySelectorAll(".nav-item")
-        .forEach(
-            button =>
-                button.classList.toggle(
-                    "active",
-                    button.dataset.view === view
-                )
-        );
+    .querySelectorAll(".nav-item")
+    .forEach(button => {
+
+        button.onclick = () => {
+
+            showView(
+                button.dataset.view
+            );
+
+            closeMobileSidebar();
+        };
+
+    });
 
     const titles = {
 
@@ -990,14 +995,32 @@ document
                     )
     );
 
+/* =====================================================
+MOBILE SIDEBAR
+===================================================== */
+
+function closeMobileSidebar() {
+
+    const sidebar = $(".sidebar");
+
+    if (sidebar) {
+        sidebar.classList.remove("open");
+    }
+}
+
 if ($("#mobileMenu")) {
 
-    $("#mobileMenu").onclick =
-        () =>
-            $(".sidebar")
-                ?.classList
-                .toggle("open");
+    $("#mobileMenu").onclick = () => {
+
+        $(".sidebar")
+            ?.classList
+            .toggle("open");
+    };
 }
+
+/* Close sidebar when a menu item is selected */
+
+
 
 /* =====================================================
 RENDER ALL
