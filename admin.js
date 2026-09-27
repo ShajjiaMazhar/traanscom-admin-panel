@@ -651,7 +651,7 @@ if ($("#changeAdminPassword")) {
 
         showView("dashboard");
 
-        await loadCategoriesFromBackend();
+        await loadCategories();
 
         await loadProductsFromBackend();
 
@@ -830,7 +830,7 @@ async function loginAdmin() {
 
         /* LOAD DATA */
 
-        await loadCategoriesFromBackend();
+        await loadCategories();
 
         await loadProductsFromBackend();
 
@@ -2119,13 +2119,8 @@ if ($("#productForm")) {
                     .value
                     .trim();
 
-            const categoryName =
-                $("#pCategory").value;
-
-            const categoryId =
-                getCategoryId(
-                    categoryName
-                );
+           const categoryId =
+    $("#pCategory").value;
 
             const currency =
                 $("#pCurrency").value;
