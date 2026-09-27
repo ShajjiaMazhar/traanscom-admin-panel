@@ -425,7 +425,110 @@ async function init() {
                 renderImagePreview();
             };
     }
+/* CHANGE ADMIN PASSWORD */
 
+if ($("#changeAdminPassword")) {
+
+    $("#changeAdminPassword").addEventListener(
+        "click",
+        async () => {
+
+            const currentPassword =
+                $("#currentAdminPassword").value.trim();
+
+            const newPassword =
+                $("#newAdminPassword").value.trim();
+
+            const confirmPassword =
+                $("#confirmAdminPassword").value.trim();
+
+            if (!currentPassword) {
+                toast("Please enter your current password.");
+                return;
+            }
+
+            if (!newPassword) {
+                toast("Please enter a new password.");
+                return;
+            }
+
+            if (newPassword.length < 8) {
+                toast(
+                    "New password must be at least 8 characters long."
+                );
+                return;
+            }
+
+            if (newPassword !== confirmPassword) {
+                toast("New passwords do not match.");
+                return;
+            }
+
+            const token =
+                localStorage.getItem(
+                    "traanscomAdminToken"
+                );
+
+            if (!token) {
+                toast("Please login again.");
+                return;
+            }
+
+            try {
+
+                const response = await fetch(
+                    `${API_URL}/users/change-password`,
+                    {
+                        method: "PUT",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json",
+
+                            "Authorization":
+                                `Bearer ${token}`
+                        },
+
+                        body: JSON.stringify({
+                            currentPassword,
+                            newPassword
+                        })
+                    }
+                );
+
+                const data =
+                    await response.json();
+
+                if (!response.ok) {
+                    throw new Error(
+                        data.message ||
+                        "Failed to change password"
+                    );
+                }
+
+                toast(
+                    "Password changed successfully."
+                );
+
+                $("#currentAdminPassword").value = "";
+                $("#newAdminPassword").value = "";
+                $("#confirmAdminPassword").value = "";
+
+            } catch (error) {
+
+                console.error(
+                    "Password change error:",
+                    error
+                );
+
+                toast(
+                    error.message ||
+                    "Failed to change password."
+                );
+            }
+        }
+    );
+}
     /* SEARCH */
 
     if ($("#productSearch")) {
@@ -1045,113 +1148,45 @@ function renderLowStock() {
 REAL BACKEND CATEGORIES
 ===================================================== */
 
-async function loadCategoriesFromBackend() {
-
-    const token =
-        localStorage.getItem(
-            "traanscomAdminToken"
-        );
-
-    if (!token) {
-        return;
-    }
-
+async function loadCategories() {
     try {
-
-        const response =
-            await fetch(
-                `${API_URL}/categories`,
-                {
-                    method: "GET",
-
-                    headers: {
-                        "Authorization":
-                            `Bearer ${token}`
-                    }
-                }
-            );
-
-        const data =
-            await response.json();
-
-        if (
-            response.status === 401 ||
-            response.status === 403
-        ) {
-            return;
-        }
+        const response = await fetch(`${API_URL}/categories`);
 
         if (!response.ok) {
-
-            console.error(
-                "Categories error:",
-                data
-            );
-
-            return;
+            throw new Error("Failed to load categories");
         }
 
-        backendCategories =
-            Array.isArray(data)
-                ? data
-                : (
-                    data.categories ||
-                    []
-                );
+        const data = await response.json();
 
-        const categoryNames =
-            backendCategories
-                .map(
-                    category =>
-                        category.name
-                )
-                .filter(Boolean);
+        backendCategories = Array.isArray(data)
+            ? data
+            : (data.categories || []);
 
-        if (
-            categoryNames.length &&
-            $("#pCategory") &&
-            $("#productCategory")
-        ) {
+        const categorySelect = $("#pCategory");
 
-            $("#pCategory").innerHTML =
-                categoryNames
-                    .map(
-                        category =>
-                            `
-                                <option value="${category}">
-                                    ${category}
-                                </option>
-                            `
-                    )
-                    .join("");
-
-            $("#productCategory").innerHTML =
-                `
-                    <option value="all">
-                        All categories
+        if (categorySelect) {
+            categorySelect.innerHTML = `
+                <option value="">Select Category</option>
+                ${backendCategories.map(category => `
+                    <option value="${category.id}">
+                        ${category.name}
                     </option>
-                ` +
-                categoryNames
-                    .map(
-                        category =>
-                            `
-                                <option value="${category}">
-                                    ${category}
-                                </option>
-                            `
-                    )
-                    .join("");
+                `).join("")}
+            `;
         }
 
     } catch (error) {
+        console.error("Category loading error:", error);
 
-        console.error(
-            "Categories connection error:",
-            error
-        );
+        const categorySelect = $("#pCategory");
+
+        if (categorySelect) {
+            categorySelect.innerHTML = `
+                <option value="">Unable to load categories</option>
+            `;
+        }
     }
 }
-
 /* =====================================================
 CATEGORY ID
 ===================================================== */
@@ -1820,7 +1855,7 @@ function handleImage(event) {
     ) {
 
         toast(
-            "Sirf JPG, PNG ya WEBP image select karein"
+            "Only Select JPG, PNG ya WEBP image"
         );
 
         event.target.value = "";
@@ -2040,7 +2075,7 @@ if ($("#productForm")) {
             if (!name) {
 
                 toast(
-                    "Product name enter karein"
+                    "Enter Product Name"
                 );
 
                 return;
@@ -2049,7 +2084,7 @@ if ($("#productForm")) {
             if (!categoryId) {
 
                 toast(
-                    "Product category nahi mili"
+                    "Product category not Found"
                 );
 
                 return;
@@ -2066,7 +2101,7 @@ if ($("#productForm")) {
             ) {
 
                 toast(
-                    "Product pricing ke liye PKR, USD ya GBP select karein"
+                    "For Product pricing, Select PKR, USD or GBP "
                 );
 
                 return;
@@ -2078,7 +2113,7 @@ if ($("#productForm")) {
             ) {
 
                 toast(
-                    "Valid product price enter karein"
+                    "Enter Valid Product Price"
                 );
 
                 return;
@@ -2090,7 +2125,7 @@ if ($("#productForm")) {
             ) {
 
                 toast(
-                    "Valid stock quantity enter karein"
+                    "Enter Valid stock quantity"
                 );
 
                 return;
@@ -2099,7 +2134,7 @@ if ($("#productForm")) {
             if (sale < 0) {
 
                 toast(
-                    "Sale price valid honi chahiye"
+                    "Sale price Should be Valid"
                 );
 
                 return;
@@ -2111,7 +2146,7 @@ if ($("#productForm")) {
             ) {
 
                 toast(
-                    "Sale price original price se zyada nahi ho sakti"
+                    "Sale price should not exceed original price"
                 );
 
                 return;
@@ -2280,7 +2315,7 @@ if ($("#productForm")) {
 
                     toast(
                         data.message ||
-                        "Product save nahi hua"
+                        "Product is not saved "
                     );
 
                     return;
@@ -2306,7 +2341,7 @@ if ($("#productForm")) {
                 ) {
 
                     toast(
-                        "Product save ho gaya, image upload ho rahi hai..."
+                        "Product is saved, image is not Uploaded"
                     );
 
                     try {
@@ -2328,7 +2363,7 @@ if ($("#productForm")) {
                         await loadProductsFromBackend();
 
                         toast(
-                            "Product save ho gaya lekin image upload nahi hui"
+                            "Product is saved, image is not Uploaded"
                         );
 
                         return;
@@ -2362,7 +2397,7 @@ if ($("#productForm")) {
 
                 toast(
                     error.message ||
-                    "Backend server check karein"
+                    "Check Backend Server "
                 );
             }
         };
@@ -2458,7 +2493,7 @@ window.deleteProduct =
 
                 toast(
                     data.message ||
-                    "Product delete nahi hua"
+                    "Product is not deleted"
                 );
 
                 return;
@@ -2478,7 +2513,7 @@ window.deleteProduct =
             );
 
             toast(
-                "Backend server check karein"
+                "Check Backend Server "
             );
         }
     };
@@ -2522,7 +2557,7 @@ async function loadOrdersFromBackend() {
         ) {
 
             toast(
-                "Admin session expire ho gaya"
+                "Admin session expires"
             );
 
             localStorage.removeItem(
@@ -2547,7 +2582,7 @@ async function loadOrdersFromBackend() {
 
             toast(
                 data.message ||
-                "Orders load nahi ho rahe"
+                "Orders not loading"
             );
 
             return;
@@ -2584,7 +2619,7 @@ async function loadOrdersFromBackend() {
         );
 
         toast(
-            "Backend server check karein"
+            "Check Backend Server"
         );
     }
 }
@@ -2608,7 +2643,7 @@ function renderOrders() {
                     colspan="6"
                     style="text-align:center;padding:30px;">
 
-                    Abhi koi order nahi hai.
+                    No Order.
 
                 </td>
 
@@ -2794,7 +2829,7 @@ window.updateOrder =
 
                 toast(
                     data.message ||
-                    "Order update nahi hua"
+                    "Order not updated"
                 );
 
                 await loadOrdersFromBackend();
@@ -2816,7 +2851,7 @@ window.updateOrder =
             );
 
             toast(
-                "Backend server check karein"
+                "Check Backend Server"
             );
         }
     };
