@@ -1821,13 +1821,20 @@ function openProductModal(
             product?.name || "";
     }
 
-    if ($("#pCategory")) {
+   if ($("#pCategory")) {
 
-        $("#pCategory").value =
-            product?.cat ||
-            backendCategories[0]?.name ||
-            "Fashion";
-    }
+    const productCategoryId =
+        product?.category_id ||
+        backendCategories.find(
+            category =>
+                category.name === product?.cat
+        )?.id ||
+        backendCategories[0]?.id ||
+        "";
+
+    $("#pCategory").value =
+        productCategoryId;
+}
 
     if ($("#pCurrency")) {
 
