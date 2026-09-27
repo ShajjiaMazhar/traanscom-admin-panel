@@ -1046,39 +1046,42 @@ function renderStats() {
     }
 
     const revenue =
-        orders
-            .filter(
-                order =>
-                    String(
-                        order.order_status ||
-                        order.status ||
-                        ""
-                    ).toLowerCase() !==
-                    "cancelled"
-            )
-            .reduce(
-                (
-                    total,
-                    order
-                ) =>
-                    total +
-                    Number(
-                        order.total || 0
-                    ),
-                0
-            );
+    orders
+        .filter(
+            order =>
+                String(
+                    order.order_status ||
+                    order.status ||
+                    ""
+                ).toLowerCase() !==
+                "cancelled"
+        )
+        .reduce(
+            (
+                total,
+                order
+            ) =>
+                total +
+                Number(
+                    order.total || 0
+                ),
+            0
+        );
 
-    if ($("#statRevenue")) {
+if ($("#statRevenue")) {
 
-        $("#statRevenue")
-            .textContent =
-            money(
-                revenue,
-                "PKR"
-            );
-    }
+    const revenueCurrency =
+        localStorage.getItem(
+            "traanscomStoreCurrency"
+        ) || "PKR";
+
+    $("#statRevenue")
+        .textContent =
+        money(
+            revenue,
+            revenueCurrency
+        );
 }
-
 /* =====================================================
 RECENT ORDERS
 ===================================================== */
