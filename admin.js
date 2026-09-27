@@ -400,7 +400,69 @@ async function init() {
         $("#storeCurrency").value =
             "PKR";
     }
+/* SAVE STORE SETTINGS */
 
+if ($("#saveSettings")) {
+
+    $("#saveSettings").addEventListener(
+        "click",
+        () => {
+
+            const storeName =
+                $("#storeName").value.trim();
+
+            const supportEmail =
+                $("#supportEmail").value.trim();
+
+            const storeCurrency =
+                $("#storeCurrency").value;
+
+            localStorage.setItem(
+                "traanscomStoreName",
+                storeName
+            );
+
+            localStorage.setItem(
+                "traanscomSupportEmail",
+                supportEmail
+            );
+
+            localStorage.setItem(
+                "traanscomStoreCurrency",
+                storeCurrency
+            );
+
+            toast(
+                "Store settings saved successfully."
+            );
+        }
+    );
+}
+/* LOAD SAVED STORE SETTINGS */
+
+const savedStoreName =
+    localStorage.getItem("traanscomStoreName");
+
+const savedSupportEmail =
+    localStorage.getItem("traanscomSupportEmail");
+
+const savedStoreCurrency =
+    localStorage.getItem("traanscomStoreCurrency");
+
+if (savedStoreName && $("#storeName")) {
+    $("#storeName").value =
+        savedStoreName;
+}
+
+if (savedSupportEmail && $("#supportEmail")) {
+    $("#supportEmail").value =
+        savedSupportEmail;
+}
+
+if (savedStoreCurrency && $("#storeCurrency")) {
+    $("#storeCurrency").value =
+        savedStoreCurrency;
+}
     /* PRODUCT IMAGE */
 
     if ($("#pImage")) {
